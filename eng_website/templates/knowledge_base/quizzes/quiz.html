@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block header_extend %}
+    <script type="text/javascript" src="{% static 'js/quiz.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <script>Quiz({{ quiz_data.questions }})</script>
+    <div class="main-content-header blue">
+        <div class="container">
+            <div class="main-columns">
+                <div class="main-content">
+                    <div class="content-header-single header-single-test test-single" id="main-test-container">
+                        <div class="container">
+                            <div class="content-header-single-img">
+                                <img itemprop="image" src="{{ quiz_data.img_url }}" alt="">
+                            </div>
+                            <div class="content-header-single-info">
+                                <button class="button-share button-circle" data-toggle="modal"
+                                        data-target="#shareButtonModal">
+                                    <span></span>
+                                </button>
+
+                                <div class="single-category-title">Тест</div>
+                                <h1 itemprop="headline">{{ quiz_data.title }}</h1>
+
+                                <div class="content-time">
+                                    <span><i class="fa fa-clock-o"></i> {{ quiz_data.time_for_read }} </span>
+                                </div>
+
+                                <div class="separator">
+                                    <span class="separator-md"></span>
+                                </div>
+                                <div class="content-header-single-note">
+                                    <div class="content-rating content-rating-center">
+                                        <div class="br-wrapper br-theme-fontawesome-stars"><select id="rating-js"
+                                                                                                   class="d-none"
+                                                                                                   style="display: none;">
+                                            <option value=""></option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                            <div class="br-widget"><a href="#" data-rating-value="1"
+                                                                      data-rating-text="1" class="br-selected"></a><a
+                                                    href="#" data-rating-value="2" data-rating-text="2"
+                                                    class="br-selected"></a><a href="#" data-rating-value="3"
+                                                                               data-rating-text="3"
+                                                                               class="br-selected"></a><a href="#"
+                                                                                                          data-rating-value="4"
+                                                                                                          data-rating-text="4"
+                                                                                                          class="br-selected br-current"></a><a
+                                                    href="#" data-rating-value="5" data-rating-text="5" class=""></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="begin-test">
+                                    <button id="test-start" class="begin-test-button">Начать тест</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-single-test d-none" id="answer-test-container">
+                        <div class="text-center">
+                            <div class="col-12 m-auto test-question-container" id="answer-list">
+                                <div class="article-main-row-description">
+                                    <h6 class="active-color" id="question-number" question="1">Вопрос 1/10</h6>
+                                    <h2 class="album-title m-auto" id="question-title">Вопрос?</h2>
+                                    <hr>
+                                    <div class="row m-auto">
+                                        <div class="col-md-6 text-center mt-4">
+                                            <div class="row m-2 answer-container">
+                                                <div class="col-2">
+                                                    <h4 class="answer-counter m-auto">A.</h4>
+                                                    <i class="answer-icon"></i>
+                                                </div>
+                                                <div class="col-10 text-left">
+                                                    <h6 class="answer-title ml-0">Вариант ответа - 1</h6>
+                                                    <p class="answer-description mt-2" style="display: none">Подробности
+                                                        вопроса</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 text-center mt-4">
+                                            <div class="row m-2 answer-container">
+                                                <div class="col-2">
+                                                    <h4 class="answer-counter m-auto">B.</h4>
+                                                    <i class="answer-icon"></i>
+                                                </div>
+                                                <div class="col-10 text-left">
+                                                    <h6 class="answer-title ml-0">Вариант ответа - 2</h6>
+                                                    <p class="answer-description mt-2" style="display: none">Подробности
+                                                        вопроса</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row m-auto">
+                                        <div class="col-md-6 text-center mt-4">
+                                            <div class="row m-2 answer-container">
+                                                <div class="col-2">
+                                                    <h4 class="answer-counter m-auto">C.</h4>
+                                                    <i class="answer-icon"></i>
+                                                </div>
+                                                <div class="col-10 text-left">
+                                                    <h6 class="answer-title ml-0">Вариант ответа - 3</h6>
+                                                    <p class="answer-description mt-2" style="display: none">Подробности
+                                                        вопроса</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 text-center mt-4">
+                                            <div class="row m-2 answer-container">
+                                                <div class="col-2">
+                                                    <h4 class="answer-counter m-auto">D.</h4>
+                                                    <i class="answer-icon"></i>
+                                                </div>
+                                                <div class="col-10 text-left">
+                                                    <h6 class="answer-title ml-0">Вариант ответа - 4</h6>
+                                                    <p class="answer-description mt-2" style="display: none">Подробности
+                                                        вопроса</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row m-auto text-center">
+                                        <button class="continue-test-button m-auto d-none"><i
+                                                class="fa fa-arrow-right"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-single-test d-none" id="result-test-container">
+                        <div class="text-center">
+                            <div class="col-12 m-auto test-question-container">
+                                <div class="row m-auto">
+                                    <div class="col-8 m-auto">
+                                        <div class="album-image z-index-100">
+                                            <div class="music-img-box d-inline-block">
+                                                <div class="img-box test-question-photo-container">
+                                                    <img class="retina box-rounded-md"
+                                                         src="{{ quiz_data.img_url }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="article-main-row-description">
+
+                                    <h6 class="active-color" id="your-result">Ваш результат</h6>
+                                    <p class="sub-title mt-2" id="description-result">описание</p>
+
+                                    <p>
+                                    <div class="br-wrapper br-theme-fontawesome-stars"><select id="rating2-js"
+                                                                                               style="display: none;">
+                                        <option value=""></option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                        <div class="br-widget"><a href="#" data-rating-value="1" data-rating-text="1"
+                                                                  class="br-selected"></a><a href="#"
+                                                                                             data-rating-value="2"
+                                                                                             data-rating-text="2"
+                                                                                             class="br-selected"></a><a
+                                                href="#" data-rating-value="3" data-rating-text="3"
+                                                class="br-selected"></a><a href="#" data-rating-value="4"
+                                                                           data-rating-text="4"
+                                                                           class="br-selected br-current"></a><a
+                                                href="#" data-rating-value="5" data-rating-text="5"></a></div>
+                                    </div>
+                                    </p>
+                                    <div class="row text-center mt-4 mb-2">
+                                        <div class="share-buttons m-auto">
+                                            <a href="http://twitter.com/share?url={{ request.path }}" target="_blank"
+                                               class="external">
+                                                <button class="share-button"><i class="fa fa-twitter"></i></button>
+                                            </a>
+                                            <a href="http://www.facebook.com/sharer.php?u={{ request.path }}"
+                                               target="_blank" class="external">
+                                                <button type="submit" class="share-button"><i
+                                                        class="fa fa-facebook-f"></i></button>
+                                            </a>
+                                            <a href="https://vk.com/share.php?url={{ request.path }}" target="_blank"
+                                               class="external">
+                                                <button type="submit" class="share-button"><i class="fa fa-vk"></i>
+                                                </button>
+                                            </a>
+                                            <a href="https://t.me/share/url?url={{ request.path }}" target="_blank"
+                                               class="external">
+                                                <button type="submit" class="share-button"><i
+                                                        class="fa fa-telegram"></i></button>
+                                            </a>
+                                            <a href="https://wa.me/?text={{ request.path }}" target="_blank"
+                                               class="external">
+                                                <button type="submit" class="share-button"><i
+                                                        class="fa fa-whatsapp"></i></button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

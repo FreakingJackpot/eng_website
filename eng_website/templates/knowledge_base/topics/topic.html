@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="main-content-header blue">
+    <div class="container">
+        <h1 class="main-content-title">
+            {{topic.title}}
+        </h1>
+    <div class="content">
+    {{topic.content|safe}}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+<div class="content">
+    <div class="container">
+        <div class="preview-list">
+            {% for article in articles %}
+                <div itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"
+                     class="preview-item ">
+                    <a href="{% url pattern_name category_slug article.slug %}" itemprop="url"
+                       class="preview-item-inner">
+                        <div class="preview-note">
+                            <div class="preview-note-left">
+                                <span>
+                                    <i class="fa fa-clock-o"></i> {{ article.time_for_read }} мин.
+                                </span>
+                            </div>
+                            <div class="preview-note-right">
+                                <span>
+                                    <i class="fa fa-eye"></i> {{ article.views }}
+                                </span>
+                            </div>
+                        </div>
+                        {% if article.image %}
+                            <div class="preview-img" style="background-image: url({{ article.image.url }})"></div>
+                        {% else %}
+                            <div class="preview-img" style="background-image: url('')"></div>
+                        {% endif %}
+                        <div class="preview-info">
+                            <div class="preview-title" itemprop="name">{{ article.title }}</div>
+                        </div>
+                    </a>
+                    <meta itemprop="position" content="1">
+                </div>
+            {% endfor %}
+        </div>

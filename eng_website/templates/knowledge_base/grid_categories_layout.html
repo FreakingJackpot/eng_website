@@ -1,0 +1,31 @@
+<div class="content">
+    <div class="container">
+        <div class="collection-list">
+            {% for category in categories %}
+                <div class="collection-item">
+                    <a href="{% url pattern_name category.slug %}" class="collection-link">
+                        {% if category.image %}
+                            <div class="collection-img" style="background-image: url({{ category.image.url }})"></div>
+                        {% else %}
+                            <div class="collection-img" style="background-image: url('')"></div>
+                        {% endif %}
+                        <div class="collection-content">
+                            <div class="content-info">
+                                <div class="content-info-item">
+                                    <div class="content-info-icon"></div>
+                                    {{ category.child_count }}
+                                </div>
+                            </div>
+                            <h4>{{ category.title }}</h4>
+
+                            <div class="collection-button">
+                                <span class="button-transparent arrow-link">
+                                    <span class="arrow-link-inner">Подробнее</span>
+                                    <span class="arrow-to-right"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
