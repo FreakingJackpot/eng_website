@@ -1,11 +1,12 @@
 from django.urls import path
 
-from .views import (HandbookTopicsListView, LessonDetailView, TopicsCategoriesListView,
+from .views import (IndexView, HandbookTopicsListView, LessonDetailView, TopicsCategoriesListView,
                     TopicsListView, TopicDetailView, PhrasebookCategoriesListView, PhrasesArticlesListView,
                     PhrasesArticleDetailView, ArticleCategoriesListView, ArticlesListView, ArticleDetailView,
-                    QuizCategoriesListView,QuizzesListView,QuizDetailView)
+                    QuizCategoriesListView, QuizzesListView, QuizDetailView)
 
 urlpatterns = [
+    path('', IndexView.as_view(), name='index'),
     path('handbook/', HandbookTopicsListView.as_view(), name='handbook'),
     path('handbook/<slug:slug>/', LessonDetailView.as_view(), name='lesson'),
     path('topics/', TopicsCategoriesListView.as_view(), name='topics-categories'),

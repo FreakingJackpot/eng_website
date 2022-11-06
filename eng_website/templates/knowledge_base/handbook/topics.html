@@ -1,73 +1,83 @@
 {% extends 'base.html' %}
 {% load static %}
-{%block content_header%}
-<div class="content-header">
-    <div class="container">
-        
-        <h1 class="content-header-title" >Справочник по грамматике английского языка</h1>
-        <p class="content-header-about">
-            У вас появились сомнения в правильности употребления того или иного артикля, составления грамматической конструкции или выбора прилагательного? - Наш онлайн справочник по грамматике английского языка призван решить все ваши сомнения и помочь в освоении трудностей английской грамматики.
-        </p>
+{% load normalize_text %}
+{% block breadcrumps %}
+    {% include "knowledge_base/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+{% endblock %}
+
+{% block content_header %}
+    <div class="content-header">
+        <div class="container">
+
+            <h1 class="content-header-title">Справочник по грамматике английского языка</h1>
+            <p class="content-header-about">
+                У вас появились сомнения в правильности употребления того или иного артикля, составления грамматической
+                конструкции или выбора прилагательного? - Наш онлайн справочник по грамматике английского языка призван
+                решить все ваши сомнения и помочь в освоении трудностей английской грамматики.
+            </p>
+        </div>
     </div>
-</div>
 {% endblock %}
 {% block content %}
-<div class="content-wrapper">
-    <div class="container">
-        <div class="courses-list handbook">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="courses-list handbook">
                 {% for topic in topics %}
-                <div class="courses-columns section-learned" itemprop="itemListElement"
-                     itemscope itemtype="http://schema.org/ListItem">
-                    <div class="courses-number">
-                        <div class="courses-number-circle">
+                    <div class="courses-columns section-learned" itemprop="itemListElement"
+                         itemscope itemtype="http://schema.org/ListItem">
+                        <div class="courses-number">
+                            <div class="courses-number-circle">
                             <span>
                                 {{ forloop.counter }}
                             </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="courses-content">
-                        <div class="courses-header">
-                            <div class="courses-lessons-content">
-                                <div class="courses-header-name">
-                                    <h3 class="courses-title" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"> {{ topic.title }}</h3>
-                                    <h3 class="courses-title-mobile handbook-title-mobile up">
+                        <div class="courses-content">
+                            <div class="courses-header">
+                                <div class="courses-lessons-content">
+                                    <div class="courses-header-name">
+                                        <h3 class="courses-title" data-toggle="collapse" href="#multiCollapseExample1"
+                                            role="button" aria-expanded="false"
+                                            aria-controls="multiCollapseExample1"> {{ topic.title }}</h3>
+                                        <h3 class="courses-title-mobile handbook-title-mobile up">
                                         <span>
                                             {{ topic.title }}
                                             <div class="arrow-down">
                                                 <i class="fas fa-chevron-down"></i>
                                             </div>
                                         </span>
-                                    </h3>
-                                </div>
-                                <div class="courses-header-number">
-                                    {{topic.lessons|length}} урока
+                                        </h3>
+                                    </div>
+                                    <div class="courses-header-number">
+                                        {{ topic.lessons|length|normalize_text_for_numbers:"lessons"}}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="handbook-lessons-mobile">
-                            <div class="handbook-lessons"  class="collapse multi-collapse" id="multiCollapseExample1">
-                                {% for lesson in topic.lessons %}
-                                    <div class="courses-lessons-item">
-                                        <div class="courses-lessons-content">
-                                            <div class="courses-theme">
-                                                <div class="courses-theme-inner border-color">
-                                                    <a href= "{% url 'lesson' lesson.slug %}" itemprop="url"
-                                                       class="courses-theme-link has-tests js-is-handbook">
-                                                        <div class="courses-theme-icon"></div>
-                                                        <h4 >{{lesson.title}}</h4>
-                                                    </a>
+                            <div class="handbook-lessons-mobile">
+                                <div class="handbook-lessons" class="collapse multi-collapse"
+                                     id="multiCollapseExample1">
+                                    {% for lesson in topic.lessons %}
+                                        <div class="courses-lessons-item">
+                                            <div class="courses-lessons-content">
+                                                <div class="courses-theme">
+                                                    <div class="courses-theme-inner border-color">
+                                                        <a href="{% url 'lesson' lesson.slug %}" itemprop="url"
+                                                           class="courses-theme-link has-tests js-is-handbook">
+                                                            <div class="courses-theme-icon"></div>
+                                                            <h4>{{ lesson.title }}</h4>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                {% endfor %}
-                                
+                                    {% endfor %}
+
+                                </div>
                             </div>
-                        </div>        
+                        </div>
                     </div>
-                </div>
-                {% endfor %}        
+                {% endfor %}
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

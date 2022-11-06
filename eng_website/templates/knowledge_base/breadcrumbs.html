@@ -1,0 +1,9 @@
+<div class="breadcrumbs-wrap">
+    <div class="container">
+        {% for label,url in breadcrumbs %}
+            <a href="{{ url }}" {% if forloop.counter == breadcrumbs|length %}
+               class="breadcrumbs-active" {% endif %} ><span>{{ label|safe }}</span></a>
+            <span class="breadcrumbs-split">/</span>
+        {% endfor %}
+    </div>
+</div>

@@ -1,12 +1,4 @@
 {% extends 'base.html' %}
-{% block content %}
-<div class="main-content-header blue">
-    <div class="container">
-        <h1 class="main-content-title">
-            {{article.title}}
-        </h1>
-    <div class="content">
-    {{article.content|safe}}
-    </div>
-</div>
+{% block breadcrumps_and_content %}
+    {% include "knowledge_base/base_detail_layout.html" with article=article breadcrumbs=breadcrumbs %}
 {% endblock %}

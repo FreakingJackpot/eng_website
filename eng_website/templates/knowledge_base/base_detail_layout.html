@@ -1,0 +1,58 @@
+{% block breadcrumps %}
+    {% include "knowledge_base/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+{% endblock %}
+{% block content %}
+    <div class="content-layout white-bg">
+        <div class="main-content-header" >
+            <div class="container">
+                <div class="main-header-columns">
+                    <div class="main-header-content">
+                        <div class="content-category-title">
+                            Статья
+                        </div>
+                        <h1 class="main-content-title" itemprop="headline">
+                            {{ article.title }}
+                        </h1>
+                        <div class="content-note-wrap">
+                            <div class="content-note">
+                                <div class="content-note">
+                                    <i class="fa-solid fa-eye"></i>
+                                    {{ article.views }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="socials-share-wrap">
+                            <a href="https://vk.com/share.php?url={{ request.path }}" target="_blank"
+                               class="external">
+                                <button type="submit" class="share-button"><i class="fa fa-vk"></i>
+                                </button>
+                            </a>
+                            <a href="https://t.me/share/url?url={{ request.path }}" target="_blank"
+                               class="external">
+                                <button type="submit" class="share-button"><i
+                                        class="fa fa-telegram"></i></button>
+                            </a>
+                            <a href="https://wa.me/?text={{ request.path }}" target="_blank"
+                               class="external">
+                                <button type="submit" class="share-button"><i
+                                        class="fa fa-whatsapp"></i></button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="main-header-sidebar">
+                        <div class="main-header-img">
+                            <img itemprop="image" src="{{ article.image.url }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="background: white">
+            <div class="main-columns content">
+                <div class="main-content" itemprop="articleBody">
+                    {{ article.content|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

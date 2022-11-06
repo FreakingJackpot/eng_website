@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
-{%block content_header%}
-<div class="content-header">
-    <div class="container">
-        <h1 class="content-title" >{{category.title}}</h1>
-        <h2 class="content-description" >{{category.description}}</h2>
-    </div>
-</div>
+{% block breadcrumps %}
+    {% include "knowledge_base/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
 {% endblock %}
-{%block content %}
-{% include "knowledge_base/grid_articles_layout.html" with articles=articles category_slug=category.slug pattern_name="article" %}
+
+{% block content_header %}
+    <div class="content-header">
+        <div class="container">
+            <h1 class="content-title">{{ category.title }}</h1>
+            <h2 class="content-description">{{ category.description }}</h2>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    {% include "knowledge_base/grid_articles_layout.html" with articles=articles category_slug=category.slug pattern_name="article" %}
 {% endblock %}

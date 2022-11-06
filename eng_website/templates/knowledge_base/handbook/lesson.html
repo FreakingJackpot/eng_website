@@ -1,12 +1,62 @@
 {% extends 'base.html' %}
-{% block content %}
-<div class="main-content-header blue">
-    <div class="container">
-        <h1 class="main-content-title">
-            {{lesson.title}}
-        </h1>
-    <div class="content">
-    {{lesson.content|safe}}
-    </div>
-</div>
+{% block breadcrumps_and_content %}
+
+    <div class="content-layout ">
+        <div class="main container courses-wrapper white-bg">
+            {% block breadcrumps %}
+                {% include "knowledge_base/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+            {% endblock %}
+            {% block content %}
+                <div class="main-content-header blue">
+                    <div class="container">
+                        <h1 class="main-content-title">
+                            {{ lesson.title }}
+                        </h1>
+                        <p class="main-content-about">
+                            {{ lesson.title }}
+                        </p>
+
+                        <div class="socials-share-wrap">
+                            <a href="https://vk.com/share.php?url={{ request.path }}" target="_blank"
+                               class="external">
+                                <button type="submit" class="share-button"><i class="fa fa-vk"></i>
+                                </button>
+                            </a>
+                            <a href="https://t.me/share/url?url={{ request.path }}" target="_blank"
+                               class="external">
+                                <button type="submit" class="share-button"><i
+                                        class="fa fa-telegram"></i></button>
+                            </a>
+                            <a href="https://wa.me/?text={{ request.path }}" target="_blank"
+                               class="external">
+                                <button type="submit" class="share-button"><i
+                                        class="fa fa-whatsapp"></i></button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="main-columns">
+                        <div class="main-content">
+                            {{ lesson.content|safe }}
+                            <div class="text-center mt-5">
+                                <a href="{% if previous_url %} {{ previous_url }} {% else %} {% url 'handbook' %} {% endif %}"
+                                   class="button-fill arrow-left-wrap">
+                                        <span class="button-inner">
+                                            <i class="fa-solid fa-arrow-left"></i> Назад
+                                        </span>
+                                </a>
+                                <a href="{% if next_url %} {{ next_url }} {% else %} {% url 'handbook' %} {% endif %}"
+                                   class="button-fill arrow-right-wrap">
+                    <span class="button-inner">
+                        Далее <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+            {% endblock %}
 {% endblock %}

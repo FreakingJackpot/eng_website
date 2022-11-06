@@ -2,7 +2,9 @@ from django.contrib import admin
 
 from knowledge_base.models import Category, TopicCategory, HandbookCategory, PhrasesCategory, ArticleCategory, \
     QuizCategory, \
-    Article, Topic, PhrasesArticle, Lesson, Quiz,Question,Answer
+    Article, Topic, PhrasesArticle, Lesson, Quiz, Question, Answer, QuizResult
+
+
 
 
 class CategoryAdminBase(admin.ModelAdmin):
@@ -10,7 +12,7 @@ class CategoryAdminBase(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs.filter(type=self.type)
+        qs = qs.filter(type=self.type)
         return qs
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -56,7 +58,7 @@ class ArticleTypedAdminBase(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs.filter(category__type=self.type)
+        qs = qs.filter(category__type=self.type)
         return qs
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -93,5 +95,7 @@ class ArticleAdmin(ArticleTypedAdminBase):
 class QuizAdmin(ArticleTypedAdminBase):
     type = Category.QUIZ
 
+
 admin.site.register(Question)
 admin.site.register(Answer)
+admin.site.register(QuizResult)

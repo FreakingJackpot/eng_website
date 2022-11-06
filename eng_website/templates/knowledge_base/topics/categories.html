@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
+{% block breadcrumps %}
+    {% include "knowledge_base/breadcrumbs.html" with breadcrumbs=breadcrumbs %}
+{% endblock %}
 {%block content_header%}
 <div class="content-header">
     <div class="container">
-        
         <h1 class="content-title" >Топики по английскому языку</h1>
     </div>
 </div>

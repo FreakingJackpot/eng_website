@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Английский язык бесплатнj </title>
+    <title>Английский язык бесплатно</title>
     <meta name="description"
           content='Aнглийский язык и все об изучении английского языка. Грамматика английского языка и курсы английского языка онлайн, тексты на английском и англо-русские словари.'>
     <meta name="author" content="">
@@ -18,9 +18,11 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <link rel="stylesheet" href="/vendors/iconfonts/font-awesome/css/font-awesome.min.css"/>
+    <script
+            src="https://code.jquery.com/jquery-3.6.1.slim.js"
+            integrity="sha256-tXm+sa1uzsbFnbXt8GJqsgi2Tw+m4BLGDof6eUPjbtk="
+            crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/9fb1773115.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&display=swap&subset=cyrillic,cyrillic-ext"
           rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
@@ -70,789 +72,209 @@
 
                             <ul class="navbar-nav" itemscope itemtype="http://schema.org/SiteNavigationElement">
                                 <li itemprop="name" class="menu-item ">
-                                    <a itemprop="url" class="nav-link" href="/handbook">Справочник</a>
+                                    <a itemprop="url" class="nav-link" href="{% url 'handbook' %}">Справочник</a>
                                 </li>
                                 <li itemprop="name" class="menu-item ">
-                                    <a itemprop="url" class="nav-link" href="/repetitor">Топики</a>
+                                    <a itemprop="url" class="nav-link" href="{% url 'topics-categories' %}">Топики</a>
                                 </li>
                                 <li class="menu-item ">
-                                    <a class="nav-link beta" href="/schools">Разговорник </a>
+                                    <a class="nav-link beta" href="{% url 'phrasebook-categories' %}">Разговорник </a>
                                 </li>
                                 <li class="menu-item">
-                                    <a class="nav-link link-hash" data-hash="reviews" href="/schools">Статьи</a>
+                                    <a class="nav-link link-hash" data-hash="reviews"
+                                       href="{% url 'articles-categories' %}">Статьи</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a class="nav-link link-hash" data-hash="reviews" href="/schools">Тесты</a>
+                                    <a class="nav-link link-hash" data-hash="reviews"
+                                       href="{% url 'quizzes-categories' %}">Тесты</a>
                                 </li>
                             </ul>
                         </div>
                     </nav>
                 </div>
 </header>
-{% block content_header %}
+{% block breadcrumps_and_content %}
+    {% block breadcrumps %}
+    {% endblock %}
+    {% block content_header %}
+    {% endblock %}
+    {% block content %}
+        {{ materials_by_sections|json_script:"materials_by_sections" }}
+        <div class="tabs-content logo-rotate-bg">
+            <div class="logo-rotate-bg-lightgray"></div>
+            <div class="logo-rotate-bg-white"></div>
+            <div class="logo-rotate-bg-content">
+                <div id="browse-overview">
+                    <section class="content-feed-wrap article-feed-large">
+                        <div class="container">
+                            <h1>
+                                <span class="text-blue">Английский язык</span> для всех
+                            </h1>
+                            {% if large_feed %}
+                                <div class="feed-list-wrapper">
 
-{% endblock %}
-{% block content %}
-    <div class="tabs-content logo-rotate-bg">
-        <div class="logo-rotate-bg-lightgray"></div>
-        <div class="logo-rotate-bg-white"></div>
-        <div class="logo-rotate-bg-content">
-            <div id="browse-overview">
-                <section class="content-feed-wrap article-feed-large">
-                    <div class="container">
-                        <h1>
-                            <span class="text-blue">Английский язык</span> для всех
-                        </h1>
-                        <div class="feed-list-wrapper">
+                                    <div class="feed-list-row-large">
+                                        <div class="feed-column feed-column-large">
 
-                            <div class="feed-list-row-large">
-                                <div class="feed-column feed-column-large">
-
-                                    <div class="feed-item ">
-                                        <div class="feed-item-inner">
-                                            <div class="feed-item-header"
-                                                 style="background-image: url('/uploads/server/cUh6pRRMLSfYnHAh.png')">
-                                                <a href="/article" class="info-tape">
-                                                    СТАТЬЯ
-                                                </a>
-                                                <div class="activity-info">
-                                                    <div class="activity-views">
-                                                        565680
+                                            <div class="feed-item ">
+                                                <div class="feed-item-inner">
+                                                    <div class="feed-item-header"
+                                                         style="background-image: url({{ large_feed.0.img_url }})">
+                                                        <a href="{{ large_feed.0.url_section }}" class="info-tape">
+                                                            СТАТЬЯ
+                                                        </a>
+                                                        <div class="activity-info">
+                                                            <div class="activity-views">
+                                                                {{ large_feed.0.views }}
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    <a href="{{ large_feed.0.url }}"
+                                                       class="feed-item-content-link">
+                                                        <div class="feed-item-content-link-inner">
+                                                            <div class="feed-item-content">
+                                                                <h4>{{ large_feed.0.title }}</h4>
+                                                            </div>
+                                                            <div class="feed-item-footer">
+                                                                <i class="fa-solid fa-arrow-right"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="arrows-border"></div>
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <a href="/article/sovety/top-10-onlayn-shkol-angliyskogo-yazyka"
-                                               class="feed-item-content-link">
-                                                <div class="feed-item-content-link-inner">
-                                                    <div class="feed-item-content">
-                                                        <h4>ТОП-10 онлайн школ английского языка</h4>
-                                                    </div>
-                                                    <div class="feed-item-footer">
-                                                        <div class="publication-date">13 ноября 2019 | 17:31</div>
-                                                        <div class="arrow-to-right"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="arrows-border"></div>
-                                            </a>
                                         </div>
+                                        {% if large_feed|length > 1 %}
+                                            <div class="feed-column feed-column-small">
+                                                {% for article in large_feed %}
+                                                    {% if loop.counter > 1 %}
+                                                        <div class="feed-item ">
+                                                            <div class="feed-item-inner">
+                                                                <div class="feed-item-header"
+                                                                     style="background-image: url({{ article.img_url }})">
+                                                                    <a href="{{ article.url_section }}"
+                                                                       class="info-tape">
+                                                                        СТАТЬЯ
+                                                                    </a>
+                                                                    <div class="activity-info">
+                                                                        <div class="activity-views">
+                                                                            {{ article.views }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <a href="{{ article.url }}"
+                                                                   class="feed-item-content-link">
+                                                                    <div class="feed-item-content-link-inner">
+                                                                        <div class="feed-item-content">
+                                                                            <h4>{{ article.title }}</h4>
+                                                                        </div>
+                                                                        <div class="feed-item-footer">
+                                                                            <i class="fa-solid fa-arrow-right"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="arrows-border"></div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
-                                <div class="feed-column feed-column-small">
+                                </div>
+                            {% endif %}
+                    </section>
+                </div>
 
-                                    <div class="feed-item ">
-                                        <div class="feed-item-inner">
-                                            <div class="feed-item-header"
-                                                 style="background-image: url('/uploads/server/LItyVindZRcrO6MK.png')">
-                                                <a href="/article" class="info-tape">
-                                                    СТАТЬЯ
-                                                </a>
-                                                <div class="activity-info">
-                                                    <div class="activity-views">
-                                                        303
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <a href="/article/sovety/luchshie-onlayn-kursy-koreyskogo-yazyka"
-                                               class="feed-item-content-link">
-                                                <div class="feed-item-content-link-inner">
-                                                    <div class="feed-item-content">
-                                                        <h4>Топ-5 онлайн курсов корейского языка</h4>
-                                                    </div>
-                                                    <div class="feed-item-footer">
-                                                        <div class="publication-date">20 сентября 2022 | 10:30</div>
-                                                        <div class="arrow-to-right"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="arrows-border"></div>
-                                            </a>
+
+                <section class="content-feed-wrap">
+                    <div class="container">
+                        <div class="tabs-wrap">
+                            <div class="tabs-header">
+                                <div class="tabs-header-title">
+                                    <h2 class="title-icon-wrap">
+                                        <div class="title-icon">
+                                            <i class="fa-solid fa-star"></i>
                                         </div>
-                                    </div>
-                                    <div class="feed-item ">
-                                        <div class="feed-item-inner">
-                                            <div class="feed-item-header"
-                                                 style="background-image: url('/uploads/server/ohpppFjHoHTXCgJ1.png')">
-                                                <a href="/article" class="info-tape">
-                                                    СТАТЬЯ
-                                                </a>
-                                                <div class="activity-info">
-                                                    <div class="activity-views">
-                                                        361
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <a href="/article/sovety/kak-vyuchit-kitayskiy-yazyk-onlayn"
-                                               class="feed-item-content-link">
-                                                <div class="feed-item-content-link-inner">
-                                                    <div class="feed-item-content">
-                                                        <h4>Как выучить китайский язык онлайн</h4>
-                                                    </div>
-                                                    <div class="feed-item-footer">
-                                                        <div class="publication-date">14 сентября 2022 | 15:35</div>
-                                                        <div class="arrow-to-right"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="arrows-border"></div>
-                                            </a>
-                                        </div>
-                                    </div>
+                                        <span class="text-blue">Материалы</span> по рубрикам
+                                    </h2>
+                                </div>
+                                <div class="tabs-header-menu">
+                            
+                            
+                                <span id="topics-button" data-href="topics-tab"
+                                      class="tabs-link button-transparent active">
+                                    Топики
+                                    
+                                </span>
+
+                                    <span id="phrasebook-button" data-href="phrasebook-tab"
+                                          class="tabs-link button-transparent ">
+                                    Разговорник
+                                    
+                                </span>
+
+                                    <span id="articles-button" data-href="articles-tab"
+                                          class="tabs-link button-transparent ">
+                                    Статьи
+                                    
+                                </span>
+
+                                    <span id="tests-button" data-href="tests-tab" class="tabs-link button-transparent ">
+                                    Тесты
+                                    
+                                </span>
+
                                 </div>
                             </div>
-                            <div class="feed-list-row">
+                            <div class="tabs-content-wrap">
+                                <div id="material_tab" class="tabs active">
+                                    <div class="feed-list-wrapper">
+                                        <div id="material-feed-list" class="feed-list-row">
+                                        </div>
+                                    </div>
+                                </div>
 
-                                <div class="feed-item ">
-                                    <div class="feed-item-inner">
-                                        <div class="feed-item-header"
-                                             style="background-image: url('/uploads/server/LfZz3gAHSmCYpfxn.jpg')">
-                                            <a href="/article" class="info-tape">
-                                                СТАТЬЯ
-                                            </a>
-                                            <div class="activity-info">
-                                                <div class="activity-views">
-                                                    420
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a href="/article/sovety/mify-o-shkolnom-onlayn-obrazovanii-pochemu-ego-ne-nado-boyatsya"
-                                           class="feed-item-content-link">
-                                            <div class="feed-item-content-link-inner">
-                                                <div class="feed-item-content">
-                                                    <h4>Мифы о школьном онлайн-образовании: почему его не надо
-                                                        бояться</h4>
-                                                </div>
-                                                <div class="feed-item-footer">
-                                                    <div class="publication-date">11 сентября 2022 | 13:53</div>
-                                                    <div class="arrow-to-right"></div>
-                                                </div>
-                                            </div>
-                                            <div class="arrows-border"></div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="feed-item ">
-                                    <div class="feed-item-inner">
-                                        <div class="feed-item-header"
-                                             style="background-image: url('/uploads/server/Wp1VsOAwOrQpM3BP.jpg')">
-                                            <a href="/article" class="info-tape">
-                                                СТАТЬЯ
-                                            </a>
-                                            <div class="activity-info">
-                                                <div class="activity-views">
-                                                    568
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a href="/article/sovety/obzor-luchshih-programm-dlya-sozdaniya-prezentaciy-na-angliyskom-reyting-2022-2023-godov"
-                                           class="feed-item-content-link">
-                                            <div class="feed-item-content-link-inner">
-                                                <div class="feed-item-content">
-                                                    <h4>Обзор лучших программ для создания презентаций на английском:
-                                                        рейтинг 2022-2023 годов</h4>
-                                                </div>
-                                                <div class="feed-item-footer">
-                                                    <div class="publication-date">7 сентября 2022 | 10:28</div>
-                                                    <div class="arrow-to-right"></div>
-                                                </div>
-                                            </div>
-                                            <div class="arrows-border"></div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="feed-item ">
-                                    <div class="feed-item-inner">
-                                        <div class="feed-item-header"
-                                             style="background-image: url('/uploads/server/1wwaRhv8uUQwigJt.png')">
-                                            <a href="/article" class="info-tape">
-                                                СТАТЬЯ
-                                            </a>
-                                            <div class="activity-info">
-                                                <div class="activity-views">
-                                                    636
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a href="/article/sovety/top-5-shkol-koreyskogo-yazyka-v-moskve"
-                                           class="feed-item-content-link">
-                                            <div class="feed-item-content-link-inner">
-                                                <div class="feed-item-content">
-                                                    <h4>Топ-5 школ корейского языка в Москве</h4>
-                                                </div>
-                                                <div class="feed-item-footer">
-                                                    <div class="publication-date">2 сентября 2022 | 13:03</div>
-                                                    <div class="arrow-to-right"></div>
-                                                </div>
-                                            </div>
-                                            <div class="arrows-border"></div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="feed-item ">
-                                    <div class="feed-item-inner">
-                                        <div class="feed-item-header"
-                                             style="background-image: url('/uploads/server/QncyaAUSi6ftbviw.png')">
-                                            <a href="/article" class="info-tape">
-                                                СТАТЬЯ
-                                            </a>
-                                            <div class="activity-info">
-                                                <div class="activity-views">
-                                                    883
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a href="/article/sovety/luchshie-kursy-dlya-polucheniya-sertifikata-tefl"
-                                           class="feed-item-content-link">
-                                            <div class="feed-item-content-link-inner">
-                                                <div class="feed-item-content">
-                                                    <h4>Лучшие курсы для получения сертификата TEFL</h4>
-                                                </div>
-                                                <div class="feed-item-footer">
-                                                    <div class="publication-date">31 августа 2022 | 10:27</div>
-                                                    <div class="arrow-to-right"></div>
-                                                </div>
-                                            </div>
-                                            <div class="arrows-border"></div>
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
             </div>
+        </div>
 
-
-            <section class="content-feed-wrap">
-                <div class="container">
-                    <div class="tabs-wrap">
-                        <div class="tabs-header">
-                            <div class="tabs-header-title">
-                                <h2 class="title-icon-wrap">
-                                    <div class="title-icon">
-                                        <img src="/assets/images/icons/star.svg" alt="">
-                                    </div>
-                                    <span class="text-blue">Материалы</span> по рубрикам
-                                </h2>
+        <template id="feed-item-template">
+            <div class="feed-item">
+                <div class="feed-item-inner">
+                    <div class="feed-item-header"
+                         style="background-image: url('')">
+                        <a href="" class="info-tape">
+                        </a>
+                        <div class="activity-info">
+                            <div class="activity-views">
                             </div>
-                            <div class="tabs-header-menu">
-                            
-                            
-                                <span data-href="topics-tab" class="tabs-link button-transparent active">
-                                    Топики
-                                    
-                                </span>
-
-                                <span data-href="phrasebook-tab" class="tabs-link button-transparent ">
-                                    Разговорник
-                                    
-                                </span>
-
-                                <span data-href="articles-tab" class="tabs-link button-transparent ">
-                                    Статьи
-                                    
-                                </span>
-
-                                <span data-href="tests-tab" class="tabs-link button-transparent ">
-                                    Тесты
-                                    
-                                </span>
-
-                            </div>
-                        </div>
-                        <div class="tabs-content-wrap">
-
-                            <div id="topics-tab" class="tabs active">
-                                <div class="feed-list-wrapper">
-                                    <div class="feed-list-row">
-
-                                        <div class="feed-item topics">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/nb8JAQw5FYnJWhaY.jpeg')">
-                                                    <a href="/topics" class="info-tape">
-                                                        ТОПИК
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            10382
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/topics/literatura/books-and-libraries"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Books and libraries</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">18 февраля 2020 | 15:37</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item topics">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/eYv2ZzoKkJJERnMc.jpg')">
-                                                    <a href="/topics" class="info-tape">
-                                                        ТОПИК
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            156909
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/topics/rozhdestvo-i-novyy-god-v-angloyazychnyh-stranah/how-i-spend-new-year"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>How I spend New Year (Как я провожу Новый год)</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">24 декабря 2019 | 12:26</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item topics">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/JbY0L2P9hPVE3k5A.jpg')">
-                                                    <a href="/topics" class="info-tape">
-                                                        ТОПИК
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            68308
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/topics/rozhdestvo-i-novyy-god-v-angloyazychnyh-stranah/new-years-celebration-in-russia"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>New Year’s celebration in Russia</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">10 декабря 2019 | 0:19</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item topics">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/a5rRZawzxshV7NSA.jpg')">
-                                                    <a href="/topics" class="info-tape">
-                                                        ТОПИК
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            19077
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/topics/rozhdestvo-i-novyy-god-v-angloyazychnyh-stranah/why-i-love--new-years-eve"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Why I love New Year’s Eve. Почему я люблю Новый год</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">4 декабря 2019 | 11:31</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div id="phrasebook-tab" class="tabs ">
-                                <div class="feed-list-wrapper">
-                                    <div class="feed-list-row">
-
-                                        <div class="feed-item phrasebook">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/nXqCvtZ3moi7gOJg.jpeg')">
-                                                    <a href="/phrasebook" class="info-tape">
-                                                        РАЗГОВОРНИК
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            14794
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/phrasebook/sredstva-svyazi/telefon"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Телефон</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">2 апреля 2019 | 17:43</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item phrasebook">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/UQNhAnREdRNxAAzk.jpg')">
-                                                    <a href="/phrasebook" class="info-tape">
-                                                        РАЗГОВОРНИК
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            12664
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/phrasebook/sredstva-svyazi/telegraf"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Телеграф</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">2 апреля 2019 | 17:37</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item phrasebook">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/EJwq7o933yqFQkff.jpg')">
-                                                    <a href="/phrasebook" class="info-tape">
-                                                        РАЗГОВОРНИК
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            14299
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/phrasebook/sredstva-svyazi/pochta"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Почта</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">2 апреля 2019 | 17:35</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item phrasebook">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/gFlF6qWP4IJdWqfb.jpg')">
-                                                    <a href="/phrasebook" class="info-tape">
-                                                        РАЗГОВОРНИК
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            12402
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/phrasebook/vyzov-policii/vyzov-policii"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Вызов полиции</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">2 апреля 2019 | 17:27</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div id="articles-tab" class="tabs ">
-                                <div class="feed-list-wrapper">
-                                    <div class="feed-list-row">
-
-                                        <div class="feed-item ">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/WZRurtYpBy9VhPLF.png')">
-                                                    <a href="/article" class="info-tape">
-                                                        СТАТЬЯ
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            721
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/article/sovety/kak-bystro-vspomnit-shkolnuyu-programmu-sovety-ekspertov"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Как быстро вспомнить школьную программу? Советы
-                                                                экспертов</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">26 августа 2022 | 12:10</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item ">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/Vf5tYok8s4DCi5Ex.png')">
-                                                    <a href="/article" class="info-tape">
-                                                        СТАТЬЯ
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            595
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/article/sovety/ucheba-v-onlayn-shkole-kakie-plyusy-i-komu-podoydet"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Учеба в онлайн-школе: какие плюсы и кому подойдет?</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">25 августа 2022 | 11:12</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item ">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/OFOuYHLqH0m1saqx.jpg')">
-                                                    <a href="/article" class="info-tape">
-                                                        СТАТЬЯ
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            794
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/article/sovety/top-5-shkol-yaponskogo-yazyka-v-moskve"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Топ-5 школ японского языка в Москве</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">20 августа 2022 | 22:48</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item ">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/JejBSrj5ZxITga3o.jpg')">
-                                                    <a href="/article" class="info-tape">
-                                                        СТАТЬЯ
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            1494
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/article/sovety/top-5-shkol-kitayskogo-yazyka-v-sankt-peterburge"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Топ-5 школ китайского языка в Санкт-Петербурге</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">16 августа 2022 | 10:34</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div id="tests-tab" class="tabs ">
-                                <div class="feed-list-wrapper">
-                                    <div class="feed-list-row">
-
-                                        <div class="feed-item tests">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/tY28wkxIIqa7onlQ.jpg')">
-                                                    <a href="/test" class="info-tape">
-                                                        ТЕСТ
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            14954
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/test/grammaticheskie-testy/test-nelichnye-formy-glagola-non-finite-forms-of-the-verb"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Тест "Неличные формы глагола. Non-Finite Forms of the
-                                                                Verb"</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">26 ноября 2019 | 12:04</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item tests">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/PiakrEL0WBaqh3cI.jpg')">
-                                                    <a href="/test" class="info-tape">
-                                                        ТЕСТ
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            9015
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <a href="/test/grammaticheskie-testy/artikli-v-ustoychivyh-vyrazheniyah"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Артикли в устойчивых выражениях</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">14 ноября 2019 | 12:30</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item tests">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/01X66sfgWx6nSrWv.png')">
-                                                    <a href="/test" class="info-tape">
-                                                        ТЕСТ
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            9552
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/test/grammaticheskie-testy/formy-gerundiya"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Формы герундия</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">23 октября 2019 | 11:19</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="feed-item tests">
-                                            <div class="feed-item-inner">
-                                                <div class="feed-item-header"
-                                                     style="background-image: url('/uploads/server/GeBfQyMqJRm66z3V.jpg')">
-                                                    <a href="/test" class="info-tape">
-                                                        ТЕСТ
-                                                    </a>
-                                                    <div class="activity-info">
-                                                        <div class="activity-views">
-                                                            7279
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="/test/grammaticheskie-testy/zalogi-v-angliyskom"
-                                                   class="feed-item-content-link">
-                                                    <div class="feed-item-content-link-inner">
-                                                        <div class="feed-item-content">
-                                                            <h4>Залоги в английском</h4>
-                                                        </div>
-                                                        <div class="feed-item-footer">
-                                                            <div class="publication-date">14 октября 2019 | 12:32</div>
-                                                            <div class="arrow-to-right"></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="arrows-border"></div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
+                    <a href=""
+                       class="feed-item-content-link">
+                        <div class="feed-item-content-link-inner">
+                            <div class="feed-item-content">
+                                <h4></h4>
+                            </div>
+                            <div class="feed-item-footer">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        <div class="arrows-border"></div>
+                    </a>
                 </div>
-            </section>
-        </div>
-    </div>
+            </div>
 
-{% endblock content %}
+        </template>
+        <script type="text/javascript" src="{% static 'js/material_feed.js' %}"></script>
+    {% endblock content %}
+{% endblock %}
 <footer class="footer" id="site-footer">
 
 
@@ -861,19 +283,15 @@
             <div class="col-lg-4 col-md-8">
                 <div class="footer-logo-wrap">
                     <a class="logo-wrap" href="/">
-                            <span class="logo">
-                                <img src="/assets/images/study/study-logo-footer.svg" alt="">
-                            </span>
                         <span class="logo-name">
-                                sts
-                                
+                                Сайт изучения английского языка
                             </span>
                     </a>
                     <div>Информационно-образовательный портал</div>
                 </div>
                 <div class="footer-contacts">
-                    <a href="tel:+7 (499) 995-06-56" class="footer-phone">+7 (499) 111 111 11</a>
-                    <a href="mailto:info@tst.ru" class="footer-email">info@sts.ru</a>
+                    <a href="tel:+7 (499) 111 111 11" class="footer-phone">+7 (499) 111 111 11</a>
+                    <a href="mailto:info@yandex.ru" class="footer-email">info@yandex.ru</a>
                 </div>
             </div>
         </div>

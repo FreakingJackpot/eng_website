@@ -1,10 +1,11 @@
 from collections import defaultdict
-from random import shuffle
+from random import shuffle, sample
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from ckeditor.fields import RichTextField
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Count
+from django.urls import reverse
 
 from services.db_tools import dict_fetch_all
 
@@ -58,8 +59,8 @@ class TopicCategory(Category):
     proxy_type = Category.TOPIC
 
     class Meta:
-        verbose_name = 'Темы топиков'
-        verbose_name_plural = 'Тема топиков'
+        verbose_name = 'Тема топиков'
+        verbose_name_plural = 'Темы топиков'
         proxy = True
 
 
@@ -94,13 +95,13 @@ class HandbookCategory(Category):
         sql = """
             WITH RECURSIVE topics AS (
                 SELECT 
-                    id,
-                    title,
-                    parent_id
+                    ht.id,
+                    ht.title,
+                    ht.parent_id
                 FROM 
-                    knowledge_base_category
+                    knowledge_base_category ht
                 WHERE
-                    parent_id IS NULL AND type ='HNDBK'
+                    ht.parent_id IS NULL AND ht.type ='HNDBK'
 
                 UNION
                     SELECT 
@@ -128,6 +129,9 @@ class HandbookCategory(Category):
 
         return topics
 
+    def get_absolute_url(self):
+        pass
+
 
 class QuizCategory(Category):
     proxy_type = Category.QUIZ
@@ -146,7 +150,6 @@ class QuizCategory(Category):
 
 class Article(models.Model):
     title = models.TextField(verbose_name="Название")
-    rating = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(5), ], verbose_name='Рейтинг')
     parent = models.ForeignKey("self", related_name='child_article', null=True,
                                blank=True, verbose_name="Предыдущая", on_delete=models.SET_NULL)
     category = models.ForeignKey("Category", related_name='articles', null=True,
@@ -169,6 +172,53 @@ class Article(models.Model):
     @classmethod
     def all_in_category(cls, slug):
         return cls.objects.filter(category__slug=slug).all()
+
+    @classmethod
+    def get_large_feed_data(cls):
+        articles = []
+        for article in cls.objects.filter(category__type=Category.ARTICLE).order_by('-views')[:3]:
+            articles.append({
+                'title': article.title,
+                'views': article.views,
+                'img_url': article.image.url,
+                'url': reverse(f'article', kwargs={
+                    'category_slug': article.category.slug,
+                    'slug': article.slug,
+
+                }),
+                'url_section': reverse(f'articles-categories'),
+            })
+
+        return articles
+
+    @classmethod
+    def get_most_raited_materials_by_sections(cls, count_for_section=4):
+        materials_by_sections = {}
+        type_section_url_name_pairs = (
+            (Category.TOPIC, 'topics', 'topic'), (Category.ARTICLE, 'articles', 'article'),
+            (Category.PHRASEBOOK, 'phrasebook', 'phrase-article')
+        )
+        for type, section, url_name in type_section_url_name_pairs:
+            articles = []
+            count_db = cls.objects.filter(category__type=type).aggregate(count=Count('id'))['count']
+            if count_for_section > count_db:
+                queryset = cls.objects.filter(category__type=type).all()
+            else:
+                queryset = cls.objects.filter(id__in=sample(range(1, count_db), count_for_section))
+            for article in queryset:
+                articles.append({
+                    'title': article.title,
+                    'views': article.views,
+                    'img_url': article.image.url,
+                    'url': reverse(f'{url_name}', kwargs={
+                        'category_slug': article.category.slug,
+                        'slug': article.slug,
+                    }),
+                    'url_section': reverse(f'{section}-categories'),
+                })
+            materials_by_sections[section] = articles
+
+        return materials_by_sections
 
 
 class Topic(Article):
@@ -197,32 +247,32 @@ class Lesson(Article):
         sql = """
         WITH RECURSIVE lessons AS (
             SELECT 
-                id,
-                title,
-                parent_id,
-                topic_id,
-                slug
+                ba.id,
+                ba.title,
+                ba.parent_id,
+                ba.category_id,
+                ba.slug
             FROM 
-                knowledge_base_article
+                knowledge_base_article ba
 
-            JOIN knowledge_base_category ON knowledge_base_category.id = knowledge_base_article.category_id
+            JOIN knowledge_base_category bc ON bc.id = ba.category_id
             WHERE
-                parent_id IS NULL AND knowledge_base_category.type ='HNDBK'
+                ba.parent_id IS NULL AND bc.type ='HNDBK'
 
             UNION
                 SELECT 
-                hl.id,
-                hl.title,
-                hl.parent_id,
-                hl.topic_id,
-                hl.slug
+                ba.id,
+                ba.title,
+                ba.parent_id,
+                ba.category_id,
+                ba.slug
             FROM 
-                knowledge_base_article hl
-            JOIN lessons t on hl.parent_id = t.id
-            JOIN knowledge_base_category ON knowledge_base_category.id = knowledge_base_article.category_id
-            WHERE knowledge_base_category.type ='HNDBK'
+                knowledge_base_article ba
+            JOIN lessons t on ba.parent_id = t.id
+            JOIN knowledge_base_category bc ON bc.id = ba.category_id
+            WHERE bc.type ='HNDBK'
         ) SELECT 
-                id, title,topic_id,slug
+                id, title,category_id as topic_id ,slug
             FROM
                 lessons;
         """
@@ -235,7 +285,6 @@ class Lesson(Article):
 
 class Quiz(models.Model):
     title = models.TextField(verbose_name="Название")
-    rating = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(5), ], verbose_name='Рейтинг')
     category = models.ForeignKey("Category", related_name='quizzes', null=True,
                                  blank=True, verbose_name="Категория", on_delete=models.SET_NULL)
     slug = models.SlugField(unique=True, db_index=True)
@@ -249,6 +298,11 @@ class Quiz(models.Model):
         verbose_name = 'Тест'
         verbose_name_plural = 'Тесты'
 
+    def __str__(self):
+        return f'{self.category.title}:{self.title}'
+
+    def get_absolute_url(self):
+        return reverse('quiz', kwargs={'category_slug': self.category.slug, 'slug': self.slug})
 
     @classmethod
     def all_in_category(cls, slug):
@@ -256,35 +310,68 @@ class Quiz(models.Model):
 
     @classmethod
     def get_quiz_article_data(cls, slug: str):
-        article = cls.objects.prefetch_related(Prefetch('questions',
-                                                        queryset=Question.objects.prefetch_related('answers')
-                                                        .order_by('number'),
-                                                        to_attr='ordered_questions')) \
-            .get(slug=slug)
+        prefetch_questions = Prefetch('questions',
+                                      queryset=Question.objects.prefetch_related('answers')
+                                      .order_by('number'),
+                                      to_attr='ordered_questions'
+                                      )
+        prefetch_results = Prefetch('results',
+                                    queryset=QuizResult.objects.order_by('min_value'),
+                                    to_attr='ordered_results'
+                                    )
+        article = cls.objects.prefetch_related(prefetch_questions, prefetch_results).get(slug=slug)
 
         quiz_article_data = {'title': article.title,
                              'img_url': article.image.url if article.image else None,
                              'time_for_read': article.time_for_read,
                              'views': article.views,
-                             'rating': article.rating,
-                             'questions': []}
+                             'questions': [],
+                             'results': []}
         for question in article.ordered_questions:
             quiz_article_data['questions'].append(question.get_question_data())
+        for result in article.ordered_results:
+            quiz_article_data['results'].append(result.get_data())
 
         return quiz_article_data
 
+    @classmethod
+    def increase_views_by_one(cls, slug: str):
+        obj = cls.objects.get(slug=slug)
+        obj.views += 1
+        obj.save()
+
+    @classmethod
+    def get_most_raited_materials(cls, count=4):
+        articles = []
+
+        count_db = cls.objects.aggregate(count=Count('id'))['count']
+        if count > count_db:
+            queryset = cls.objects.all()
+        else:
+            queryset = cls.objects.filter(id__in=sample(range(1, count_db), count))
+
+        for article in queryset:
+            articles.append({
+                'title': article.title,
+                'views': article.views,
+                'img_url': article.image.url,
+                'url': article.get_absolute_url(),
+                'url_section': reverse(f'quizzes-categories'),
+            })
+        return articles
+
 
 class Question(models.Model):
-    number = models.PositiveIntegerField(validators=[MinValueValidator(1), ])
+    number = models.PositiveIntegerField(validators=[MinValueValidator(1), ], verbose_name='номер вопроса')
     content = models.TextField(verbose_name='Содержание')
-    article = models.ForeignKey(Article, verbose_name='Тест', on_delete=models.CASCADE, related_name='questions')
+    quiz = models.ForeignKey(Quiz, verbose_name='Тест', on_delete=models.CASCADE, related_name='questions')
 
     class Meta:
         verbose_name = "Вопрос"
         verbose_name_plural = 'Вопросы'
 
     def __str__(self):
-        return f'{self.article.title}: {self.number} - {self.content}'
+        return f'{self.quiz.title}: {self.number} - {self.content}'
 
     def get_question_data(self):
         data = {'number': self.number, 'content': self.content, 'answers': []}
@@ -310,3 +397,20 @@ class Answer(models.Model):
 
     def get_answer_data(self):
         return {'content': self.content, 'correct': self.correct}
+
+
+class QuizResult(models.Model):
+    min_value = models.IntegerField(validators=[MinValueValidator(0), ], verbose_name='нижняя граница результата')
+    max_value = models.IntegerField(validators=[MinValueValidator(0), ], verbose_name='верхняя граница результата')
+    content = models.TextField(verbose_name='Содержание')
+    quiz = models.ForeignKey(Quiz, verbose_name='Тест', on_delete=models.CASCADE, related_name='results')
+
+    class Meta:
+        verbose_name = 'Результат теста'
+        verbose_name_plural = 'Результаты тестов'
+
+    def __str__(self):
+        return f'{self.quiz.title}: {self.content}'
+
+    def get_data(self):
+        return {'content': self.content, 'min_value': self.min_value, 'max_value': self.max_value}
