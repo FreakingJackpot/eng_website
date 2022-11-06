@@ -47,7 +47,7 @@ class HandbookTopicsListView(ListView):
 
 class DetailViewWithViewsIncrement(DetailView):
     model = Article
-    section_name: None | str = None
+    section_name = None
 
     def get_object(self, queryset=None):
         if queryset is None:
@@ -127,9 +127,9 @@ class LessonDetailView(DetailView):
 
 
 class CategoriesBaseListView(ListView):
-    type: str | None = None
+    type = None
     model = Category
-    section_name: None | str = None
+    section_name = None
 
     def get_queryset(self):
         return self.model.all_with_child_count(self.type)
@@ -157,7 +157,7 @@ class TopicsCategoriesListView(CategoriesBaseListView):
 class ArticlesBaseListView(ListView):
     model = Article
     category_model = Category
-    section_name: None | str = 'Статьи'
+    section_name = 'Статьи'
 
     def get_queryset(self):
         return self.model.all_in_category(self.kwargs.get('slug'))

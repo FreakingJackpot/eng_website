@@ -49,7 +49,7 @@ class Category(models.Model):
         return f'{self.type}:{self.title}'
 
     @classmethod
-    def all_with_child_count(cls, type: str | None = None):
+    def all_with_child_count(cls, type = None):
         if type is None:
             type = cls.proxy_type
         return cls.objects.filter(type=type).annotate(child_count=models.Count('articles')).all()
@@ -142,7 +142,7 @@ class QuizCategory(Category):
         proxy = True
 
     @classmethod
-    def all_with_child_count(cls, type: str | None = None):
+    def all_with_child_count(cls, type= None):
         if type is None:
             type = cls.proxy_type
         return cls.objects.filter(type=type).annotate(child_count=models.Count('quizzes')).all()
@@ -335,7 +335,7 @@ class Quiz(models.Model):
         return quiz_article_data
 
     @classmethod
-    def increase_views_by_one(cls, slug: str):
+    def increase_views_by_one(cls, slug):
         obj = cls.objects.get(slug=slug)
         obj.views += 1
         obj.save()
